@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentine's Day Card</title>
+  <title> Card</title>
   <style>
     /* Basic reset and mobile-friendly styling */
     * {
@@ -68,9 +68,10 @@
       background: #ff3366;
     }
     #noBtn {
+      color: black;
       width: 30%;
       font-size: 1em;
-      background: #ff99cc;
+      background: #d3bdc8;
       position: relative;
     }
     p {
@@ -83,26 +84,29 @@
   <div id="container">
     <!-- First Name Input Section -->
     <div id="nameContainer">
+      <p>Welcome! Let's verify that you are the right recepient for this message, and not just a random person who stole a paper bird from my locker:)</p>
       <p>Please enter your first name:</p>
       <input type="text" id="firstNameInput" placeholder="First Name">
       <br>
       <button id="submitName">Submit</button>
-      <p id="nameError" style="color:red; display:none;">Sorry, this is not for you...🤨</p>
+      <p id="nameError" style="color:rgb(185, 0, 0); display:none;">Sorry, this is not for you...🤨</p>
     </div>
     
     <!-- Communication Verification Section -->
     <div id="commContainer" style="display:none;">
-      <p>Just to make sure it is you😎, what is our primary way of communication?</p>
+      <p>There are hundreds of thousands of girls in the world that bear the name Chloe. This message, however, is addressed to only one girl. So let's make sure it is actually you😎...</p>
+        <p>What is our primary way of communication?</p>
       <input type="text" id="commInput" placeholder="Enter answer">
       <br>
       <button id="submitComm">Submit</button>
-      <p id="commError" style="color:red; display:none;">Not quite...🤨🤨🤨</p>
+      <p id="commError" style="color:rgb(185, 0, 0); display:none;">Not quite... are you sure you're Chloe?🤨🤨🤨</p>
     </div>
     
     <!-- Valentine Question Section (hidden initially) -->
     <div id="valentineContainer" style="display:none;">
       <p>Congratulations! You passed the security clearance!😎✅</p>
-      <p>💕Would you want to be my valentine?💕</p>
+      <p>💕Now... Would you want to be my valentine?💕</p>
+      <p id="questiontext" style="font-size:0.9em; color:#555;"></p>
       <div class="button-container">
         <button id="yesBtn">Yes</button>
         <button id="noBtn">No</button>
@@ -135,6 +139,7 @@
     const noBtn = document.getElementById("noBtn");
     const resultText = document.getElementById("resultText");
     const subText = document.getElementById("subText");
+    const questiontext = document.getElementById("questiontext");
 
     // Variables to track button behavior
     let noClickCount = 0;
@@ -149,7 +154,7 @@
     // First Name Verification
     submitNameBtn.addEventListener("click", function() {
       const name = firstNameInput.value.trim();
-      if (name === "Chloe") {
+      if (name === "Chloe" || name === "chloe") {
         nameContainer.style.display = "none";
         commContainer.style.display = "block";
       } else {
@@ -180,32 +185,41 @@
     // "No" button click event
     noBtn.addEventListener("click", function() {
       noClickCount++;
-
+      
       if (noClickCount === 1) {
         noBtn.innerText = "Are you sure?";
-        yesWidth += 10;
-        yesFontSize += 0.2;
+        yesWidth += 30;
+        yesFontSize += 0.6;
         noWidth = Math.max(noWidth - 10, 10);
         noFontSize = Math.max(noFontSize - 0.1, 0.5);
       } else if (noClickCount === 2) {
         noBtn.innerText = "Really?";
-        yesWidth += 10;
-        yesFontSize += 0.2;
+        yesWidth += 30;
+        yesFontSize += 0.6;
         noWidth = Math.max(noWidth - 10, 10);
         noFontSize = Math.max(noFontSize - 0.1, 0.5);
       } else if (noClickCount === 3) {
         noBtn.innerText = "Please";
-        yesWidth += 10;
-        yesFontSize += 0.2;
+        yesWidth += 30;
+        yesFontSize += 0.6;
         noWidth = Math.max(noWidth - 10, 10);
         noFontSize = Math.max(noFontSize - 0.1, 0.5);
       } else {
         // For clicks after the third: change text to "oops", bounce the button, and adjust sizes faster.
         noBtn.innerText = "oops";
-        yesWidth += 20;
-        yesFontSize += 0.4;
-        noWidth = Math.max(noWidth - 20, 5);
-        noFontSize = Math.max(noFontSize - 0.2, 0.4);
+        if (noClickCount >= 40){
+          noBtn.innerText = "please just give up already";
+        } else if (noClickCount >= 30){
+          noBtn.innerText = "😡";
+        } else if (noClickCount >= 20){
+          noBtn.innerText = "😠";
+        } else if (noClickCount >= 10){
+          noBtn.innerText = "☹️";
+        }
+        yesWidth += 30;
+        yesFontSize += 0.6;
+        noWidth = Math.max(noWidth - 30, 5);
+        noFontSize = Math.max(noFontSize - 0.05, 0.2);
         
         // Make the "No" button bounce around by making its position fixed.
         noBtn.style.position = "fixed";
