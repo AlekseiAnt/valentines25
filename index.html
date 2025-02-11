@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Ensure proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valentine's Day Card</title>
+  <style>
+    /* Basic reset and mobile-friendly styling */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: #ffe6e6; /* soft pink background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Container for the card */
+    #container {
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+    }
+    /* Styling for text input and buttons */
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 1.2em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      background: #ff6699;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    /* Button container for the valentine question */
+    .button-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      position: relative;
+    }
+    /* Initial styles for Yes and No buttons */
+    #yesBtn {
+      width: 70%;
+      font-size: 1.5em;
+      background: #ff3366;
+    }
+    #noBtn {
+      width: 30%;
+      font-size: 1em;
+      background: #ff99cc;
+      position: relative;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- First Name Input Section -->
+    <div id="nameContainer">
+      <p>Please enter your first name:</p>
+      <input type="text" id="firstNameInput" placeholder="First Name">
+      <br>
+      <button id="submitName">Submit</button>
+      <p id="nameError" style="color:red; display:none;">Sorry, this is not for you...🤨</p>
+    </div>
+    
+    <!-- Communication Verification Section -->
+    <div id="commContainer" style="display:none;">
+      <p>Just to make sure it is you😎, what is our primary way of communication?</p>
+      <input type="text" id="commInput" placeholder="Enter answer">
+      <br>
+      <button id="submitComm">Submit</button>
+      <p id="commError" style="color:red; display:none;">Not quite...🤨🤨🤨</p>
+    </div>
+    
+    <!-- Valentine Question Section (hidden initially) -->
+    <div id="valentineContainer" style="display:none;">
+      <p>Congratulations! You passed the security clearance!😎✅</p>
+      <p>💕Would you want to be my valentine?💕</p>
+      <div class="button-container">
+        <button id="yesBtn">Yes</button>
+        <button id="noBtn">No</button>
+      </div>
+    </div>
+    
+    <!-- Result Section (hidden initially) -->
+    <div id="resultContainer" style="display:none;">
+      <p id="resultText"></p>
+      <p id="subText" style="font-size:0.9em; color:#555;"></p>
+    </div>
+  </div>
+
+  <script>
+    // Get references to the elements
+    const nameContainer = document.getElementById("nameContainer");
+    const commContainer = document.getElementById("commContainer");
+    const valentineContainer = document.getElementById("valentineContainer");
+    const resultContainer = document.getElementById("resultContainer");
+
+    const nameError = document.getElementById("nameError");
+    const submitNameBtn = document.getElementById("submitName");
+    const firstNameInput = document.getElementById("firstNameInput");
+
+    const commInput = document.getElementById("commInput");
+    const submitCommBtn = document.getElementById("submitComm");
+    const commError = document.getElementById("commError");
+
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const resultText = document.getElementById("resultText");
+    const subText = document.getElementById("subText");
+
+    // Variables to track button behavior
+    let noClickCount = 0;
+    let yesWidth = 70;   // in percentage
+    let noWidth = 30;    // in percentage
+    let yesFontSize = 1.5; // in em
+    let noFontSize = 1.0;  // in em
+
+    // Valid communication answers (in lowercase)
+    const validCommAnswers = ["pigeon", "pigeons", "carrier pigeon", "carrier pigeons"];
+
+    // First Name Verification
+    submitNameBtn.addEventListener("click", function() {
+      const name = firstNameInput.value.trim();
+      if (name === "Chloe") {
+        nameContainer.style.display = "none";
+        commContainer.style.display = "block";
+      } else {
+        nameError.style.display = "block";
+      }
+    });
+
+    // Communication Question Verification
+    submitCommBtn.addEventListener("click", function() {
+      const answer = commInput.value.trim().toLowerCase();
+      if (validCommAnswers.includes(answer)) {
+        commContainer.style.display = "none";
+        valentineContainer.style.display = "block";
+        commError.style.display = "none";
+      } else {
+        commError.style.display = "block";
+      }
+    });
+
+    // "Yes" button click event
+    yesBtn.addEventListener("click", function() {
+      resultText.innerText = "🥰Sweet!🥰";
+      subText.innerText = "Except for the fact that we're not going to see each other on Valentine's Day because one of us (I'm not going to say who) is running away to that one weird place called Vernon...";
+      valentineContainer.style.display = "none";
+      resultContainer.style.display = "block";
+    });
+
+    // "No" button click event
+    noBtn.addEventListener("click", function() {
+      noClickCount++;
+
+      if (noClickCount === 1) {
+        noBtn.innerText = "Are you sure?";
+        yesWidth += 10;
+        yesFontSize += 0.2;
+        noWidth = Math.max(noWidth - 10, 10);
+        noFontSize = Math.max(noFontSize - 0.1, 0.5);
+      } else if (noClickCount === 2) {
+        noBtn.innerText = "Really?";
+        yesWidth += 10;
+        yesFontSize += 0.2;
+        noWidth = Math.max(noWidth - 10, 10);
+        noFontSize = Math.max(noFontSize - 0.1, 0.5);
+      } else if (noClickCount === 3) {
+        noBtn.innerText = "Please";
+        yesWidth += 10;
+        yesFontSize += 0.2;
+        noWidth = Math.max(noWidth - 10, 10);
+        noFontSize = Math.max(noFontSize - 0.1, 0.5);
+      } else {
+        // For clicks after the third: change text to "oops", bounce the button, and adjust sizes faster.
+        noBtn.innerText = "oops";
+        yesWidth += 20;
+        yesFontSize += 0.4;
+        noWidth = Math.max(noWidth - 20, 5);
+        noFontSize = Math.max(noFontSize - 0.2, 0.4);
+        
+        // Make the "No" button bounce around by making its position fixed.
+        noBtn.style.position = "fixed";
+        // Calculate random positions within the viewport.
+        const btnWidth = noBtn.offsetWidth;
+        const btnHeight = noBtn.offsetHeight;
+        const maxLeft = window.innerWidth - btnWidth;
+        const maxTop = window.innerHeight - btnHeight;
+        const randLeft = Math.random() * maxLeft;
+        const randTop = Math.random() * maxTop;
+        noBtn.style.left = randLeft + "px";
+        noBtn.style.top = randTop + "px";
+      }
+      
+      // Apply the updated sizes to the buttons
+      yesBtn.style.width = yesWidth + "%";
+      yesBtn.style.fontSize = yesFontSize + "em";
+      noBtn.style.width = noWidth + "%";
+      noBtn.style.fontSize = noFontSize + "em";
+    });
+  </script>
+</body>
+</html>
